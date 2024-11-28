@@ -1,23 +1,29 @@
 # Image  
-FROM node:18.19.1-alpine
+#FROM node:18.19.1-alpine
+FROM node:20.17.0-slim  
 
 # MongaDEV Distributions
 LABEL maintainer="brunopoleza@outlook.com.br"
 LABEL version="1.0"
 LABEL description="Bot Discord Mongadj SoundCloud Music."
 
-# Definir diretório de trabalho no container
-WORKDIR /app
+# Set the working directory  
+WORKDIR /app  
 
-# Copiar o arquivo package.json e package-lock.json (ou yarn.lock)  
-COPY package*.json ./
+# Install FFmpeg  
+RUN apt-get update && apt-get install -y ffmpeg  
 
-# Instalar dependências 
-# --only=production para instalar apenas dependências de produção, omita se precisar de dependências de desenvolvimento
-RUN npm install --only=production
+# Copy package.json and package-lock.json for npm install  
+COPY package*.json ./  
 
-# Copiar todos os arquivos do projeto para o diretório de trabalho
-COPY . .
+# Install dependencies  
+RUN npm install --production  
 
-# O comando que será executado quando o container iniciar
-CMD ["node", "bot.js"]
+# Copy the rest of the application code  
+COPY . .  
+
+# Expose the port the app runs on  
+EXPOSE 3000  
+
+# Command to run the application  
+CMD ["node", "bot.js"]  
