@@ -2,11 +2,11 @@
 
 ```
 docker run -d \
-  --name mongadj \ 
-  -e TOKEN='your_discord_bot_token' \ 
+  --name mongadj \
+  -e TOKEN='your_discord_bot_token' \
   -e PREFIX='!' \
   --restart unless-stopped \
-  lorthe/discord-mongadj  
+  lorthe/discord-mongadj
 ```
 
 # Build and push docker image
@@ -24,5 +24,6 @@ sudo apt install ffmpeg
 npm install ytdl-core  
 pip install -U yt-dlp  
 ```
+
 
 
