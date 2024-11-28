@@ -1,7 +1,7 @@
 const { joinVoiceChannel, createAudioResource, createAudioPlayer } = require('@discordjs/voice');
 const scdl = require('soundcloud-downloader').default;
 
-async function playSoundCloud(voiceChannel, url, message) { // Inclua message como argumento se necessário para enviar respostas  
+async function playSoundCloud(voiceChannel, url, message) { // Inclua `message` como parâmetro  
     if (!voiceChannel) {
         return message.reply('You need to be in a voice channel to play music.');
     }

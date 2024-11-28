@@ -36,8 +36,7 @@ client.on('messageCreate', async message => {
             if (!voiceChannel) {
                 return message.reply('You need to be in a voice channel to play music!');
             }
-            // Passa o voiceChannel como argumento para a função playSoundCloud  
-            playSoundCloud(voiceChannel, args.join(' '));
+            playSoundCloud(voiceChannel, args.join(' '), message); // Passando o objeto `message`  
         }  
     }
 });
