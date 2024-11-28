@@ -1,0 +1,7 @@
+# Node Projetc
+node_modules/
+npm-debug.log
+# Logs
+logs
+# .env file
+.env
