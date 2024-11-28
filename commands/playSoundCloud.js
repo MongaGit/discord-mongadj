@@ -1,9 +1,10 @@
 const { joinVoiceChannel, createAudioResource, createAudioPlayer } = require('@discordjs/voice');
 const scdl = require('soundcloud-downloader').default;
 
-async function playSoundCloud(voiceChannel, url, message) { // Inclua `message` como parâmetro  
+async function playSoundCloud(interaction, url) {
+    const voiceChannel = interaction.member.voice.channel;
     if (!voiceChannel) {
-        return message.reply('You need to be in a voice channel to play music.');
+        return interaction.reply({ content: 'You need to be in a voice channel to play music!', ephemeral: true });
     }
 
     try {
@@ -24,11 +25,11 @@ async function playSoundCloud(voiceChannel, url, message) { // Inclua `message` 
             connection.destroy();
         });
 
-        message.reply('Playing your SoundCloud track!');
+        await interaction.reply({ content: 'Playing your SoundCloud track!' });
     } catch (error) {
         console.error(error);
-        message.reply('Failed to play the track. Please check the URL and try again.');
+        interaction.reply({ content: 'Failed to play the track. Please check the URL and try again.', ephemeral: true });
     }
 }
 
-module.exports = playSoundCloud;  
+module.exports = playSoundCloud;

@@ -1,10 +1,10 @@
 {
   "name": "discord-mongadj",
   "version": "1.0.0",
-  "description": "",
+  "description": "``` sudo apt install ffmpeg #sudo snap install yt-dlp npm install ytdl-core",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node bot.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
