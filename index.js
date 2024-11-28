@@ -1,31 +1,45 @@
-require('dotenv').config();  
-const { Client, GatewayIntentBits } = require('discord.js');  
-const playSoundCloud = require('./commands/playSoundCloud');  
+require('dotenv').config();
+const { Client, GatewayIntentBits } = require('discord.js');
+const playSoundCloud = require('./commands/playSoundCloud');
 
-const client = new Client({  
-    intents: [  
-        GatewayIntentBits.Guilds,  
-        GatewayIntentBits.GuildMessages,  
-        GatewayIntentBits.GuildVoiceStates  
-    ]  
-});  
+const client = new Client({
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildVoiceStates
+    ]
+});
 
-const GUILD_ID = process.env.DISCORD_GUILD_ID || 'id_padrao';  
-const COMMAND_PREFIX = process.env.COMMAND_PREFIX || '!';  
+client.on('ready', () => {
+    console.log(`Logged in as ${client.user.tag}!`);
+});
 
-client.on('ready', () => {  
-    console.log(`Logged in as ${client.user.tag}!`);  
-    const guild = client.guilds.cache.get(GUILD_ID);  
-    if (!guild) console.log('Guild not found. Please check the DISCORD_GUILD_ID in .env');  
-});  
+client.on('messageCreate', async message => {
+    if (!message.guild || message.author.bot) return;
 
-client.on('messageCreate', message => {  
-    if (!message.guild || message.guild.id !== GUILD_ID) return;  
+    console.log("Message ID: ", message.id);
+    console.log("Channel: ", message.channel.name);
+    console.log("Username: ", message.author.username);
+    console.log("Message: ", message.content);
 
-    // Check if the message starts with the defined prefix and command  
-    if (message.content.startsWith(`${COMMAND_PREFIX}play`)) {  
-        playSoundCloud(client, message);  
-    }  
-});  
+    if (message.content.startsWith(process.env.COMMAND_PREFIX)) {
+        const commandBody = message.content.slice(process.env.COMMAND_PREFIX.length).trim();
+        const args = commandBody.split(' ');
+        const command = args.shift().toLowerCase();
 
-client.login(process.env.DISCORD_BOT_TOKEN);
+        if (command === 'play') {
+            if (!message.member) {
+                message.member = await message.guild.members.fetch(message.author.id);
+            }
+            const voiceChannel = message.member.voice.channel;
+            if (!voiceChannel) {
+                return message.reply('You need to be in a voice channel to play music!');
+            }
+            // Passa o voiceChannel como argumento para a função playSoundCloud  
+            playSoundCloud(voiceChannel, args.join(' '));
+        }  
+    }
+});
+
+client.login(process.env.DISCORD_BOT_TOKEN); 
